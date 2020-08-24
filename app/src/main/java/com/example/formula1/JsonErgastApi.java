@@ -8,6 +8,6 @@ public interface JsonErgastApi {
     // full url
     //http://ergast.com/api/f1/seasons.json
     //relative url
-    @GET("seasons")
-    Call<SeasonTable> getSeasons();
+    @GET("seasons.json")
+    Call<ApiResponse> getSeasons();
 }

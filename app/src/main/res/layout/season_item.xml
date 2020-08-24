@@ -20,14 +20,13 @@
           android:text="@string/season_name"/>
 
       <ImageButton
-          android:id="@+id/info_image_button"
+          android:id="@+id/wiki_info_image_button"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
           android:layout_marginRight="6dp"
           android:gravity="center_horizontal"
-          android:src="@drawable/ic_baseline_info_24"
           android:layout_alignParentEnd="true" />
   </RelativeLayout>
 </androidx.cardview.widget.CardView>
