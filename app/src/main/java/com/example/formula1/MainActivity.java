@@ -21,12 +21,16 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements SeasonAdapter.InfoButtonClick{
+public class MainActivity extends AppCompatActivity implements SeasonAdapter.ButtonsClick {
+
+    public final static String SEASON_YEAR_KEY = "season_year";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<Season> mSeasonsArrayList;
+
+    private String year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements SeasonAdapter.Inf
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-
                 if (!response.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "Code: " + response.code(), Toast.LENGTH_LONG).show();
                 }
@@ -68,10 +71,10 @@ public class MainActivity extends AppCompatActivity implements SeasonAdapter.Inf
 
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
-
+                t.printStackTrace();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-
         buildRecyclerView();
     }
 
@@ -87,6 +90,13 @@ public class MainActivity extends AppCompatActivity implements SeasonAdapter.Inf
     @Override
     public void onInfoButtonClick(Uri uri, View view) {
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onYearButtonClick(String seasonYear, View view) {
+        Intent intent = new Intent(MainActivity.this, FieldActivity.class);
+        intent.putExtra(SEASON_YEAR_KEY, seasonYear);
         startActivity(intent);
     }
 }

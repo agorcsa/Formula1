@@ -1,11 +1,10 @@
 package com.example.formula1;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,15 +17,17 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.SeasonView
 
     private ArrayList<Season> mSeasonsList;
     private Uri uri;
-    private InfoButtonClick listener;
+    private ButtonsClick listener;
 
-    public SeasonAdapter(ArrayList<Season> mSeasonsList, InfoButtonClick listener) {
+
+    public SeasonAdapter(ArrayList<Season> mSeasonsList, ButtonsClick listener) {
         this.mSeasonsList = mSeasonsList;
         this.listener = listener;
     }
 
-    public interface InfoButtonClick {
+    public interface ButtonsClick {
         void onInfoButtonClick(Uri uri, View view);
+        void onYearButtonClick(String seasonYear, View view);
     }
 
     @NonNull
@@ -40,14 +41,19 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.SeasonView
     public void onBindViewHolder(@NonNull SeasonViewHolder holder, int position) {
         final Season currentItem = mSeasonsList.get(position);
         // year
-        String seasonYear = String.valueOf(currentItem);
-        holder.mSeasonYearTextView.setText(seasonYear);
+        holder.mSeasonYearTextView.setText(String.valueOf(currentItem.getYear()));
+        holder.mSeasonYearTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               String year = String.valueOf(currentItem.getYear());
+               listener.onYearButtonClick(year, v);
+            }
+        });
 
         // wiki uri
         holder.mWikiInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 uri = Uri.parse(currentItem.getWikiUrl());
                 listener.onInfoButtonClick(uri, v);
             }
@@ -62,13 +68,13 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.SeasonView
     public static class SeasonViewHolder extends RecyclerView.ViewHolder {
 
         private TextView mSeasonYearTextView;
-        private ImageButton mWikiInfoButton;
+        private Button mWikiInfoButton;
 
         public SeasonViewHolder(@NonNull View itemView) {
             super(itemView);
 
             mSeasonYearTextView = itemView.findViewById(R.id.season_year_text_view);
-            mWikiInfoButton = itemView.findViewById(R.id.wiki_info_image_button);
+            mWikiInfoButton = itemView.findViewById(R.id.wiki_info_button);
         }
     }
 }

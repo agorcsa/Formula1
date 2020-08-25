@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="4dp"
     app:cardCornerRadius="4dp">
 
   <RelativeLayout
@@ -19,14 +20,15 @@
           android:textSize="24sp"
           android:text="@string/season_name"/>
 
-      <ImageButton
-          android:id="@+id/wiki_info_image_button"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
+      <Button
+          android:id="@+id/wiki_info_button"
+          android:layout_width="40dp"
+          android:layout_height="40dp"
           android:layout_alignParentRight="true"
           android:layout_centerVertical="true"
           android:layout_marginRight="6dp"
           android:gravity="center_horizontal"
+          android:background="@drawable/round_button"
           android:layout_alignParentEnd="true" />
   </RelativeLayout>
 </androidx.cardview.widget.CardView>

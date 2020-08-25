@@ -8,30 +8,29 @@ public class MRData {
     @SerializedName("xmlns")
     @Expose
     private String xmlns;
-
     @SerializedName("series")
     @Expose
     private String series;
-
     @SerializedName("url")
     @Expose
     private String url;
-
     @SerializedName("limit")
     @Expose
     private String limit;
-
     @SerializedName("offset")
     @Expose
     private String offset;
-
     @SerializedName("total")
     @Expose
     private String total;
-
     @SerializedName("SeasonTable")
     @Expose
     private SeasonTable seasonTable;
+
+    @SerializedName("DriverTable")
+    @Expose
+    private DriverTable driverTable;
+
 
     public String getXmlns() {
         return xmlns;
@@ -87,5 +86,9 @@ public class MRData {
 
     public void setSeasonTable(SeasonTable seasonTable) {
         this.seasonTable = seasonTable;
+    }
+
+    public DriverTable getDriverTable() {
+        return driverTable;
     }
 }
