@@ -42,6 +42,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.formula1.R.drawable.black;
+import static com.example.formula1.R.drawable.tires;
+
 public class FieldActivity extends AppCompatActivity implements DriverAdapter.OnClick {
 
     public static final String COMPETITOR_NAME = "driver's name";
@@ -54,11 +57,18 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
     private RecyclerView.LayoutManager mDriverLayoutManager;
     private ArrayList<Driver> mDriverArrayList = new ArrayList<>();
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fieldBinding = DataBindingUtil.setContentView(this, R.layout.activity_field);
+
+        Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(getDrawable(tires));
+
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
 
         getSeasonFromIntent();
         fieldApiCall();

@@ -7,4 +7,7 @@
    <string name="field_activity">Racers</string>
    <string name="driver_profile">Driver\'s profile</string>
     <string name="search_nationality">Search nationality</string>
+    <string name="summary">summary</string>
+    <string name="start">start</string>
+    <string name="formula_1">Formula 1</string>
 </resources>

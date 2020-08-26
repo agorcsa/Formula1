@@ -28,7 +28,7 @@
           android:layout_centerVertical="true"
           android:layout_marginRight="6dp"
           android:gravity="center_horizontal"
-          android:background="@drawable/round_button"
+          android:background="@drawable/shape_button"
           android:layout_alignParentEnd="true" />
   </RelativeLayout>
 </androidx.cardview.widget.CardView>
