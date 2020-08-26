@@ -1,4 +1,4 @@
-package com.example.formula1;
+package com.example.formula1.object;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,8 +11,17 @@ public class DriverTable {
     @Expose
     private int season;
 
+    @SerializedName("driverId")
+    @Expose
+    private String driverId;
+
     @SerializedName("Drivers")
     private List<Driver> driverList;
+
+    public DriverTable(int season, List<Driver> driverList) {
+        this.season = season;
+        this.driverList = driverList;
+    }
 
     public List<Driver> getDriverList() {
         return driverList;
@@ -22,8 +31,7 @@ public class DriverTable {
         return season;
     }
 
-    public DriverTable(int season, List<Driver> driverList) {
-        this.season = season;
-        this.driverList = driverList;
+    public String getDriverId() {
+        return driverId;
     }
 }
