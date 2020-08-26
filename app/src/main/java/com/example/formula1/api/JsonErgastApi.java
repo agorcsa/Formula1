@@ -1,4 +1,4 @@
-package com.example.formula1;
+package com.example.formula1.api;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

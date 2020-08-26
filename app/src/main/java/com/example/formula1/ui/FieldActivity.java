@@ -1,4 +1,4 @@
-package com.example.formula1;
+package com.example.formula1.ui;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -19,6 +19,13 @@ import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.formula1.api.ApiResponse;
+import com.example.formula1.object.Driver;
+import com.example.formula1.adapter.DriverAdapter;
+import com.example.formula1.object.DriverTable;
+import com.example.formula1.api.JsonDriverApi;
+import com.example.formula1.object.MRData;
+import com.example.formula1.R;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -34,10 +41,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class FieldActivity extends AppCompatActivity implements DriverAdapter.OnClick{
+public class FieldActivity extends AppCompatActivity implements DriverAdapter.OnClick {
+
+    public static final String COMPETITOR_NAME = "driver's name";
 
     private RecyclerView mDriverRecyclerView;
-    private RecyclerView.Adapter mDriverAdapter;
+    private DriverAdapter mDriverAdapter;
     private RecyclerView.LayoutManager mDriverLayoutManager;
     private ArrayList<Driver> mDriverArrayList;
     private TextView counter;
@@ -109,7 +118,7 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
         mDriverRecyclerView = findViewById(R.id.field_recycler_view);
         mDriverRecyclerView.setHasFixedSize(true);
         mDriverLayoutManager = new LinearLayoutManager(this);
-        mDriverAdapter = new DriverAdapter(mDriverArrayList, this);
+        mDriverAdapter = new DriverAdapter(getApplicationContext(), mDriverArrayList, this);
         mDriverRecyclerView.setLayoutManager(mDriverLayoutManager);
         mDriverRecyclerView.setAdapter(mDriverAdapter);
     }
@@ -121,8 +130,9 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
     }
 
     @Override
-    public void onItemClick(View v) {
-        Intent intent = new Intent(FieldActivity.this, DriverProfileActivity.class);
+    public void onItemClick(String competitorName, View v) {
+        Intent intent = new Intent(FieldActivity.this, CompetitorActivity.class);
+        intent.putExtra(COMPETITOR_NAME, competitorName);
         startActivity(intent);
     }
 
@@ -142,9 +152,7 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Toast.makeText(getApplicationContext(), "SearchView", Toast.LENGTH_LONG).show();
-
-                //mDriverAdapter.getFilter().filter(newText);
+                mDriverAdapter.getFilter().filter(newText);
                 return false;
             }
         });

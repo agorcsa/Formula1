@@ -16,12 +16,21 @@ public class DriverTable {
     private String driverId;
 
     @SerializedName("Drivers")
+    @Expose
     private List<Driver> driverList;
+
+    /*@SerializedName("Drivers")
+    @Expose
+    private List<Competitor> competitorList;*/
 
     public DriverTable(int season, List<Driver> driverList) {
         this.season = season;
         this.driverList = driverList;
     }
+
+   /* public List<Competitor> getCompetitorList() {
+        return competitorList;
+    }*/
 
     public List<Driver> getDriverList() {
         return driverList;

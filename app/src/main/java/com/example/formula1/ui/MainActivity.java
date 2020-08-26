@@ -1,4 +1,4 @@
-package com.example.formula1;
+package com.example.formula1.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +10,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.formula1.api.ApiResponse;
+import com.example.formula1.api.JsonErgastApi;
+import com.example.formula1.object.MRData;
+import com.example.formula1.R;
+import com.example.formula1.object.Season;
+import com.example.formula1.adapter.SeasonAdapter;
+import com.example.formula1.object.SeasonTable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

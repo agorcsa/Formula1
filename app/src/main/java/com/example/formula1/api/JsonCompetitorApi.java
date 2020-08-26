@@ -1,7 +1,5 @@
 package com.example.formula1.api;
 
-import com.example.formula1.object.Competitor;
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 
@@ -11,5 +9,5 @@ public interface JsonCompetitorApi {
     // relative url
     // driverId, example: ricciardo.json
     @GET("ricciardo.json")
-    Call<ApiResponse> getCompetitor();
+    Call<ApiResponse> getCompetitorDetails();
 }

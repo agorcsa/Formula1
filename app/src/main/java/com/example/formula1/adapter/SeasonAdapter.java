@@ -1,4 +1,4 @@
-package com.example.formula1;
+package com.example.formula1.adapter;
 
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import com.example.formula1.R;
+import com.example.formula1.object.Season;
 
 import java.util.ArrayList;
 

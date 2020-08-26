@@ -5,4 +5,6 @@
    <string name="info"></string>
 
    <string name="field_activity">Racers</string>
+   <string name="driver_profile">Driver\'s profile</string>
+    <string name="search_nationality">Search nationality</string>
 </resources>

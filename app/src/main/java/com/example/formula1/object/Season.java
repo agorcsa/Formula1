@@ -1,4 +1,4 @@
-package com.example.formula1;
+package com.example.formula1.object;
 
 import com.google.gson.annotations.SerializedName;
 

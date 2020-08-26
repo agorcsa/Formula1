@@ -1,5 +1,6 @@
-package com.example.formula1;
+package com.example.formula1.api;
 
+import com.example.formula1.object.MRData;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

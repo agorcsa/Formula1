@@ -12,20 +12,29 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".FieldActivity"
+            android:name=".ui.FieldActivity"
             android:label="@string/field_activity"
             android:launchMode="singleTop"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
+                android:value=".ui.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ui.CompetitorActivity"
+            android:label="@string/driver_profile"
+            android:launchMode="singleTop"
+            android:parentActivityName=".ui.FieldActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.FieldActivity" />
         </activity>
     </application>
 </manifest>

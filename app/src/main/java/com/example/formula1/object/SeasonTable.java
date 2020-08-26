@@ -1,5 +1,6 @@
-package com.example.formula1;
+package com.example.formula1.object;
 
+import com.example.formula1.object.Season;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
