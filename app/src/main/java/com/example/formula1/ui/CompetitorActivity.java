@@ -1,7 +1,5 @@
 package com.example.formula1.ui;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
@@ -12,19 +10,17 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import com.example.formula1.R;
 import com.example.formula1.api.ApiResponse;
 import com.example.formula1.api.JsonCompetitorApi;
-import com.example.formula1.api.JsonDriverApi;
-import com.example.formula1.object.Competitor;
-import com.example.formula1.object.Driver;
+import com.example.formula1.databinding.ActivityCompetitorBinding;
 import com.example.formula1.object.DriverTable;
 import com.example.formula1.object.MRData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -43,29 +39,20 @@ public class CompetitorActivity extends AppCompatActivity {
     private String driverId;
     private int position = 0;
 
-    private TextView mCompetitorName;
-    private ImageView mFlag;
-    private TextView mStartNumber;
-    private TextView mCode;
-    private Button mInfoButton;
+    private ActivityCompetitorBinding competitorBinding;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_competitor);
+        competitorBinding = DataBindingUtil.setContentView(this, R.layout.activity_competitor);
 
-        mCompetitorName = findViewById(R.id.competitor_name_textView);
-        mFlag = findViewById(R.id.flag_imageView);
-        mStartNumber = findViewById(R.id.start_number_textView);
-        mCode = findViewById(R.id.code_textView);
-        mInfoButton = findViewById(R.id.competitor_info_button);
-
-        currentCompetitor = (String) Objects.requireNonNull(getIntent().getExtras()).get(FieldActivity.COMPETITOR_NAME);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(currentCompetitor);
-
+        getCompetitorFromIntent();
         displayCompetitorData();
+        competitorApiCall();
+    }
 
+    public void competitorApiCall() {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
@@ -98,7 +85,13 @@ public class CompetitorActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void getCompetitorFromIntent() {
+        currentCompetitor = (String) Objects.requireNonNull(getIntent().getExtras()).get(FieldActivity.COMPETITOR_NAME);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(currentCompetitor);
+    }
+
     public void displayCompetitorData() {
-        mCompetitorName.setText(currentCompetitor);
+        competitorBinding.competitorNameTextView.setText(currentCompetitor);
     }
 }

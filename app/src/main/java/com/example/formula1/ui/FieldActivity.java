@@ -9,17 +9,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.formula1.api.ApiResponse;
+import com.example.formula1.databinding.ActivityFieldBinding;
 import com.example.formula1.object.Driver;
 import com.example.formula1.adapter.DriverAdapter;
 import com.example.formula1.object.DriverTable;
@@ -44,32 +45,39 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FieldActivity extends AppCompatActivity implements DriverAdapter.OnClick {
 
     public static final String COMPETITOR_NAME = "driver's name";
+    private String currentSeason;
+
+    private ActivityFieldBinding fieldBinding;
 
     private RecyclerView mDriverRecyclerView;
     private DriverAdapter mDriverAdapter;
     private RecyclerView.LayoutManager mDriverLayoutManager;
-    private ArrayList<Driver> mDriverArrayList;
-    private TextView counter;
+    private ArrayList<Driver> mDriverArrayList = new ArrayList<>();
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_field);
+        fieldBinding = DataBindingUtil.setContentView(this, R.layout.activity_field);
 
-        counter = findViewById(R.id.thai_counter_text_view);
+        getSeasonFromIntent();
+        fieldApiCall();
+        buildRecyclerView();
+    }
 
-        String clickedSeason = Objects.requireNonNull(getIntent().getExtras()).getString(MainActivity.SEASON_YEAR_KEY);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(clickedSeason);
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    private void getSeasonFromIntent() {
+        currentSeason = Objects.requireNonNull(getIntent().getExtras()).getString(MainActivity.SEASON_YEAR_KEY);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(currentSeason);
+    }
 
-        mDriverArrayList = new ArrayList<>();
-
+    public void fieldApiCall() {
         Gson gson = new GsonBuilder()
                 .setLenient()
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://ergast.com/api/f1/" + clickedSeason + "/")
+                .baseUrl("http://ergast.com/api/f1/" + currentSeason + "/")
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
@@ -94,12 +102,11 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
                 List<String> uniqueNationalities = new ArrayList<>(new HashSet<>(nationalities));
                 for (String nationality: uniqueNationalities) {
                     int count = Collections.frequency(nationalities, nationality);
-                    counter.append(nationality +": " + count + "\n");
+                    fieldBinding.counterTextView.append(nationality +": " + count + "\n");
 
                     //Comparator c = Collections.reverseOrder();
                     //Collections.sort(list,c);
                 }
-
                 mDriverArrayList.clear();
                 mDriverArrayList.addAll(driverTable.getDriverList());
                 mDriverAdapter.notifyDataSetChanged();
@@ -111,8 +118,8 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-        buildRecyclerView();
     }
+
 
     public void buildRecyclerView() {
         mDriverRecyclerView = findViewById(R.id.field_recycler_view);

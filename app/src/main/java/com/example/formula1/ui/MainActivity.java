@@ -1,6 +1,7 @@
 package com.example.formula1.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.formula1.api.ApiResponse;
 import com.example.formula1.api.JsonErgastApi;
+import com.example.formula1.databinding.ActivityMainBinding;
 import com.example.formula1.object.MRData;
 import com.example.formula1.R;
 import com.example.formula1.object.Season;
@@ -35,17 +37,20 @@ public class MainActivity extends AppCompatActivity implements SeasonAdapter.But
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<Season> mSeasonsArrayList;
+    private ArrayList<Season> mSeasonsArrayList = new ArrayList<>();
 
-    private String year;
+    private ActivityMainBinding mainBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        mSeasonsArrayList = new ArrayList<>();
+        seasonApiCall();
+        buildRecyclerView();
+    }
 
+    public void seasonApiCall() {
         Gson gson = new GsonBuilder()
                 // To avoid error with malformed JSON
                 // https://stackoverflow.com/questions/39918814/use-jsonreader-setlenienttrue-to-accept-malformed-json-at-line-1-column-1-path
@@ -82,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements SeasonAdapter.But
                 Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
-        buildRecyclerView();
     }
 
     public void buildRecyclerView() {
