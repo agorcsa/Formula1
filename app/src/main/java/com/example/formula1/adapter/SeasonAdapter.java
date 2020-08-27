@@ -10,7 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.example.formula1.R;
 import com.example.formula1.object.Season;
 
@@ -28,11 +27,6 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.SeasonView
         this.listener = listener;
     }
 
-    public interface ButtonsClick {
-        void onInfoButtonClick(Uri uri, View view);
-        void onYearButtonClick(String seasonYear, View view);
-    }
-
     @NonNull
     @Override
     public SeasonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -48,8 +42,8 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.SeasonView
         holder.mSeasonYearTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               String year = String.valueOf(currentItem.getYear());
-               listener.onYearButtonClick(year, v);
+                String year = String.valueOf(currentItem.getYear());
+                listener.onYearButtonClick(year, v);
             }
         });
 
@@ -66,6 +60,12 @@ public class SeasonAdapter extends RecyclerView.Adapter<SeasonAdapter.SeasonView
     @Override
     public int getItemCount() {
         return mSeasonsList.size();
+    }
+
+    public interface ButtonsClick {
+        void onInfoButtonClick(Uri uri, View view);
+
+        void onYearButtonClick(String seasonYear, View view);
     }
 
     public static class SeasonViewHolder extends RecyclerView.ViewHolder {

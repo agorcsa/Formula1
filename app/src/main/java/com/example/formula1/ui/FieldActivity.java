@@ -42,12 +42,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.example.formula1.R.drawable.black;
-import static com.example.formula1.R.drawable.tires;
 
 public class FieldActivity extends AppCompatActivity implements DriverAdapter.OnClick {
 
     public static final String COMPETITOR_NAME = "driver's name";
+    public static final String COMPETITOR_NUMBER = "driver's start number";
+    public static final String DRIVER_CODE = "driver's short code";
+
     private String currentSeason;
 
     private ActivityFieldBinding fieldBinding;
@@ -62,13 +63,6 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fieldBinding = DataBindingUtil.setContentView(this, R.layout.activity_field);
-
-        Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(getDrawable(tires));
-
-        View decorView = getWindow().getDecorView();
-        // Hide the status bar
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
 
         getSeasonFromIntent();
         fieldApiCall();
@@ -110,12 +104,9 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
                     nationalities.add(driver.getNationality());
                 }
                 List<String> uniqueNationalities = new ArrayList<>(new HashSet<>(nationalities));
-                for (String nationality: uniqueNationalities) {
+                for (String nationality : uniqueNationalities) {
                     int count = Collections.frequency(nationalities, nationality);
-                    fieldBinding.counterTextView.append(nationality +": " + count + "\n");
-
-                    //Comparator c = Collections.reverseOrder();
-                    //Collections.sort(list,c);
+                    fieldBinding.counterTextView.append(nationality + ": " + count + "\n");
                 }
                 mDriverArrayList.clear();
                 mDriverArrayList.addAll(driverTable.getDriverList());
@@ -146,10 +137,13 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
         startActivity(intent);
     }
 
+
     @Override
-    public void onItemClick(String competitorName, View v) {
+    public void onItemClick(String competitorName, String startNumber, String code, View v) {
         Intent intent = new Intent(FieldActivity.this, CompetitorActivity.class);
         intent.putExtra(COMPETITOR_NAME, competitorName);
+        intent.putExtra(COMPETITOR_NUMBER, startNumber);
+        intent.putExtra(DRIVER_CODE, code);
         startActivity(intent);
     }
 

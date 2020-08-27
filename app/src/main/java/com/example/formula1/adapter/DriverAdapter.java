@@ -18,66 +18,54 @@ import com.example.formula1.object.Driver;
 
 import java.util.ArrayList;
 
-
 public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.DriverViewHolder> implements Filterable {
 
-    private Context context;
     private ArrayList<Driver> mDriverList;
-    // copy of the mDriverList used for the SearchView, containing all the items
-    private ArrayList<Driver> mDriverListFull;
-
+    private ArrayList<Driver> mDriverListFiltered;
     private Uri uri;
+    private String code;
     private OnClick listener;
-
-    public DriverAdapter(Context context, ArrayList<Driver> mDriverList, OnClick listener) {
-        this.context = context;
-        this.mDriverList = mDriverList;
-        mDriverListFull = new ArrayList<>(mDriverList);
-        this.listener = listener;
-    }
-
     private Filter recipeFilter = new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                ArrayList<Driver> filteredList = new ArrayList<>();
-
-                if (constraint == null || constraint.length() == 0) {
-                    filteredList.addAll(mDriverListFull);
-                } else {
-                    // takes our input, transforms it to String, turns it to lower case,
-                    // to avoid case sensitivity and removes the blank space before and after our input
-                    String filteredPattern = constraint.toString().toLowerCase().trim();
-                    // checks if the what recipe name contains the filter pattern
-                    for (Driver item : mDriverListFull) {
-                        if (item.getNationality().toLowerCase().contains(filteredPattern)) {
-                            // if yes, add the item to the list
-                            filteredList.add(item);
-                        }
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<Driver> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                mDriverListFiltered = mDriverList;
+            } else {
+                // takes our input, transforms it to String, turns it to lower case,
+                // to avoid case sensitivity and removes the blank space before and after our input
+                String filteredPattern = constraint.toString().toLowerCase().trim();
+                // checks if the what recipe name contains the filter pattern
+                for (int i = 0; i < mDriverList.size(); i++) {
+                    if (mDriverList.get(i).getNationality().toLowerCase().contains(filteredPattern)) {
+                        // if yes, add the item to the list
+                        filteredList.add(mDriverList.get(i));
                     }
                 }
-                FilterResults results = new FilterResults();
-                results.values = filteredList;
-
-                return results;
             }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
 
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                mDriverList.clear();
-                mDriverList.addAll((ArrayList) results.values);
-                notifyDataSetChanged();
-            }
-        };
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            mDriverListFiltered.clear();
+            mDriverListFiltered.addAll((ArrayList) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    public DriverAdapter(Context context, ArrayList<Driver> mDriverList, OnClick listener) {
+        this.mDriverList = mDriverList;
+        mDriverListFiltered = mDriverList;
+        this.listener = listener;
+    }
 
     @Override
     public Filter getFilter() {
         return recipeFilter;
-    }
-
-
-    public interface OnClick {
-        void onDriverInfoButtonClick(Uri uri, View view);
-        void onItemClick(String competitorName, View view);
     }
 
     @NonNull
@@ -89,19 +77,21 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.DriverView
 
     @Override
     public void onBindViewHolder(@NonNull DriverViewHolder holder, final int position) {
-        final Driver currentItem = mDriverList.get(position);
+        final Driver currentItem = mDriverListFiltered.get(position);
         final String fullName = currentItem.getSurname() + " " + currentItem.getName();
         holder.mName.setText(fullName);
         holder.mNationality.setText(currentItem.getNationality());
         holder.mBirthDate.setText(currentItem.getBirthDate());
 
-        String competitorNumber = String.valueOf(currentItem.getCompetitorNumber());
+        final String competitorNumber = String.valueOf(currentItem.getCompetitorNumber());
 
-        if (competitorNumber.isEmpty() || Integer.parseInt(competitorNumber)== 0 ) {
-            holder.mCompetitorNumber.setText("No ranking number available");
+        if (competitorNumber.isEmpty() || Integer.parseInt(competitorNumber) == 0) {
+            holder.mCompetitorNumber.setText("No start number available");
         } else {
             holder.mCompetitorNumber.setText(String.valueOf(currentItem.getCompetitorNumber()));
         }
+
+        code = currentItem.getCode();
 
         holder.mInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,30 +104,31 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.DriverView
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(fullName,v);
+                // void onItemClick(String competitorName, String startNumber, String code, View view);
+                listener.onItemClick(fullName, competitorNumber, code, v);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mDriverList.size();
+        return mDriverListFiltered.size();
     }
 
+    public interface OnClick {
+        void onDriverInfoButtonClick(Uri uri, View view);
+
+        void onItemClick(String competitorName, String startNumber, String code, View view);
+    }
 
     public static class DriverViewHolder extends RecyclerView.ViewHolder {
         // season year
         // name, nationality, date of birth and booked start number of each competitor.
         private TextView mSeason;
-
         private TextView mName;
-
         private TextView mNationality;
-
         private TextView mBirthDate;
-
         private TextView mCompetitorNumber;
-
         private Button mInfoButton;
 
         public DriverViewHolder(@NonNull View itemView) {

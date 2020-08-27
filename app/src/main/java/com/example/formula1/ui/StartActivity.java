@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -15,13 +16,12 @@ import com.example.formula1.R;
 
 import java.util.Objects;
 
-import static com.example.formula1.R.drawable.black;
 import static com.example.formula1.R.drawable.raceflag;
 
 public class StartActivity extends AppCompatActivity {
 
     private Button startButton;
-    
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,12 +29,7 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.start_activity);
 
         Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(getDrawable(raceflag));
-        getSupportActionBar().setTitle(Html.fromHtml("<font color='#000000'></font>"));
-
-        View decorView = getWindow().getDecorView();
-        // Hide the status bar
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        decorView.setSystemUiVisibility(uiOptions);
+        getSupportActionBar().setTitle(Html.fromHtml("<font color='#e56617'></font>"));
 
         startButton = findViewById(R.id.start_button);
         startButton.setOnClickListener(new View.OnClickListener() {

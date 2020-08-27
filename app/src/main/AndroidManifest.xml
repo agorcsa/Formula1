@@ -3,16 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.formula1">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity android:name=".ui.StartActivity">
             <intent-filter>
@@ -20,7 +18,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.MainActivity"
             android:label="Seasons"
@@ -30,7 +27,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.StartActivity" />
         </activity>
-
         <activity
             android:name=".ui.FieldActivity"
             android:label="@string/field_activity"
@@ -40,7 +36,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MainActivity" />
         </activity>
-
         <activity
             android:name=".ui.CompetitorActivity"
             android:label="@string/driver_profile"
@@ -51,4 +46,5 @@
                 android:value=".ui.FieldActivity" />
         </activity>
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

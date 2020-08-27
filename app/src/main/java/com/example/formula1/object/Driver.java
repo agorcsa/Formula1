@@ -21,6 +21,22 @@ public class Driver {
     @Expose
     private String birthDate;
 
+    @SerializedName("code")
+    @Expose
+    private String code;
+
+    @SerializedName("permanentNumber")
+    @Expose
+    private int competitorNumber;
+
+    @SerializedName("url")
+    @Expose
+    private String driversWiki;
+
+    public String getCode() {
+        return code;
+    }
+
     public String getSurname() {
         return surname;
     }
@@ -44,12 +60,4 @@ public class Driver {
     public String getDriversWiki() {
         return driversWiki;
     }
-
-    @SerializedName("permanentNumber")
-    @Expose
-    private int competitorNumber;
-
-    @SerializedName("url")
-    @Expose
-    private String driversWiki;
 }

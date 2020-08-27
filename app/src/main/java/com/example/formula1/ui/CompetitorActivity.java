@@ -1,10 +1,10 @@
 package com.example.formula1.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -16,11 +16,13 @@ import com.example.formula1.R;
 import com.example.formula1.api.ApiResponse;
 import com.example.formula1.api.JsonCompetitorApi;
 import com.example.formula1.databinding.ActivityCompetitorBinding;
+import com.example.formula1.object.Driver;
 import com.example.formula1.object.DriverTable;
 import com.example.formula1.object.MRData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -33,11 +35,11 @@ public class CompetitorActivity extends AppCompatActivity {
 
     private String currentCompetitor;
     private String nationality;
-    private int startNumber;
-    private String abbreviation;
+    private String birthDate;
+    private String startNumber;
+    private String code;
     private String url;
     private String driverId;
-    private int position = 0;
 
     private ActivityCompetitorBinding competitorBinding;
 
@@ -63,7 +65,7 @@ public class CompetitorActivity extends AppCompatActivity {
                 .build();
 
         JsonCompetitorApi jsonCompetitorApi = retrofit.create(JsonCompetitorApi.class);
-        Call<ApiResponse> call = jsonCompetitorApi.getCompetitorDetails();
+        Call<ApiResponse> call = jsonCompetitorApi.getCompetitorDetails(driverId);
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
@@ -75,6 +77,12 @@ public class CompetitorActivity extends AppCompatActivity {
                 DriverTable driverTable = mrData.getDriverTable();
 
                 driverId = driverTable.getDriverId();
+
+                List<Driver> driversList = driverTable.getDriverList();
+                // we have a list of arrays with a single object, therefor I use position = 0
+                nationality = driversList.get(0).getNationality();
+                birthDate = driversList.get(0).getBirthDate();
+                url = driversList.get(0).getDriversWiki();
             }
 
             @Override
@@ -89,9 +97,30 @@ public class CompetitorActivity extends AppCompatActivity {
     private void getCompetitorFromIntent() {
         currentCompetitor = (String) Objects.requireNonNull(getIntent().getExtras()).get(FieldActivity.COMPETITOR_NAME);
         Objects.requireNonNull(getSupportActionBar()).setTitle(currentCompetitor);
+        driverId = convertFullNameToDriverId(currentCompetitor);
+        startNumber = (String) getIntent().getExtras().get(FieldActivity.COMPETITOR_NUMBER);
+    }
+
+    private String convertFullNameToDriverId(String fullName) {
+        driverId = fullName.substring(fullName.indexOf(" "));
+        return driverId;
     }
 
     public void displayCompetitorData() {
         competitorBinding.competitorNameTextView.setText(currentCompetitor);
+        competitorBinding.birthDateTextView.setText(birthDate);
+        if (startNumber.equals("0") || startNumber.isEmpty()) {
+            competitorBinding.startNumberTextView.setText("No start number available");
+        } else {
+            competitorBinding.startNumberTextView.setText(startNumber);
+        }
+
+        competitorBinding.competitorInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(intent);
+            }
+        });
     }
 }
