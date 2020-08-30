@@ -16,15 +16,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/start_number_textView" />
 
-        <ImageView
+        <com.example.formula1.util.FlagImageRatio
             android:id="@+id/flag_imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="20dp"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/competitor_name_textView"
-            app:srcCompat="@drawable/ic_baseline_flag_24" />
+            app:layout_constraintTop_toBottomOf="@+id/competitor_name_textView" />
 
         <TextView
             android:id="@+id/birth_date_text_view"
