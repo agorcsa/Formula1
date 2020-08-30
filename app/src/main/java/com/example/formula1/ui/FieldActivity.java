@@ -48,6 +48,7 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
     public static final String COMPETITOR_NAME = "driver's name";
     public static final String COMPETITOR_NUMBER = "driver's start number";
     public static final String DRIVER_CODE = "driver's short code";
+    public static final String NATIONALITY = "driver's nationality";
 
     private String currentSeason;
 
@@ -139,11 +140,12 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
 
 
     @Override
-    public void onItemClick(String competitorName, String startNumber, String code, View v) {
+    public void onItemClick(String competitorName, String startNumber, String code, String nationality, View v) {
         Intent intent = new Intent(FieldActivity.this, CompetitorActivity.class);
         intent.putExtra(COMPETITOR_NAME, competitorName);
         intent.putExtra(COMPETITOR_NUMBER, startNumber);
         intent.putExtra(DRIVER_CODE, code);
+        intent.putExtra(NATIONALITY, nationality);
         startActivity(intent);
     }
 
