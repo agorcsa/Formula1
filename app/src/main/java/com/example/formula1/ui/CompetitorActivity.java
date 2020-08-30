@@ -1,10 +1,13 @@
 package com.example.formula1.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -12,6 +15,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import com.blongho.country_data.World;
 import com.example.formula1.R;
 import com.example.formula1.api.ApiResponse;
 import com.example.formula1.api.JsonCompetitorApi;
@@ -19,6 +23,7 @@ import com.example.formula1.databinding.ActivityCompetitorBinding;
 import com.example.formula1.object.Driver;
 import com.example.formula1.object.DriverTable;
 import com.example.formula1.object.MRData;
+import com.example.formula1.util.FlagImageRatio;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -35,6 +40,7 @@ public class CompetitorActivity extends AppCompatActivity {
 
     private String currentCompetitor;
     private String nationality;
+    private String alpha3;
     private String birthDate;
     private String startNumber;
     private String code;
@@ -99,6 +105,7 @@ public class CompetitorActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setTitle(currentCompetitor);
         driverId = convertFullNameToDriverId(currentCompetitor);
         startNumber = (String) getIntent().getExtras().get(FieldActivity.COMPETITOR_NUMBER);
+        nationality = (String) getIntent().getExtras().get(FieldActivity.NATIONALITY);
     }
 
     private String convertFullNameToDriverId(String fullName) {
@@ -122,5 +129,42 @@ public class CompetitorActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        switch (nationality) {
+            case "American":
+                setCountryFlag("usa");
+                break;
+            case "British":
+                setCountryFlag("united kingdom");
+                break;
+            case "German":
+                setCountryFlag("Germany");
+                break;
+            case "New Zeelander":
+                setCountryFlag("New Zeeland");
+                break;
+            default:
+                setCountryFlag(convertNationalityToAlpha3(nationality));
+                break;
+        }
     }
+
+    public void setCountryFlag(String nationality) {
+        // Initializes the library and loads all data for the world's flags
+        World.init(getApplicationContext());
+
+        // gets the flag of the specific country
+        final int flag = World.getFlagOf(nationality);
+
+        // Sets the image of an imageView
+        ImageView flagImage = findViewById(R.id.flag_imageView);
+        flagImage.setImageResource(flag);
+    }
+
+    public String convertNationalityToAlpha3(String nationality) {
+        alpha3 = nationality.substring(0, 2);
+        return alpha3;
+    }
+
+
 }
