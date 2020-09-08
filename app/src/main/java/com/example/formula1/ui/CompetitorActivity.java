@@ -165,6 +165,4 @@ public class CompetitorActivity extends AppCompatActivity {
         alpha3 = nationality.substring(0, 2);
         return alpha3;
     }
-
-
 }

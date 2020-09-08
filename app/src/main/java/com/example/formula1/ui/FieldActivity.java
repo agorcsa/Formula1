@@ -31,9 +31,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -170,5 +173,43 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
             }
         });
         return true;
+    }
+
+    // we have an Array of String nationalities
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private static void sortDriversByNationality(String[] inputArray) {
+        //Create LinkedHashMap with elements as keys and their occurrences as values
+        // nationality as String
+        // occurrence as Integer
+        Map<String, Integer> nationalityCountMap = new LinkedHashMap<>();
+
+        // check presence of each element in nationalityCountMap
+        for (int i = 0; i < inputArray.length; i++) {
+            if (nationalityCountMap.containsKey(inputArray[i])) {
+                //If element is present in nationalityCountMap, increment its value by 1
+                nationalityCountMap.put(inputArray[i], nationalityCountMap.get(inputArray[i]) + 1);
+            } else {
+                //If element is not present, insert this element with 1 as its value
+                nationalityCountMap.put(inputArray[i], 1);
+            }
+        }
+
+        //Create an ArrayList to hold sorted elements
+        ArrayList sortedNationalities = new ArrayList();
+
+        //Java 8 code to sort nationalityCountMap by values in descending order
+        //put keys into sortedNationalities list
+        /*nationalityCountMap.entrySet()
+                .stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+                .forEach(entry -> {
+                    class get value {
+                            while(
+                        int i = 1)
+                        i <=entry.getValue();
+                        i++;
+                    }
+                    sortedNationalities.add(entry.getKey());
+                });*/
     }
 }
