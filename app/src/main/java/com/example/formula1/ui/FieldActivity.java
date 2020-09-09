@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -50,8 +51,10 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
 
     public static final String COMPETITOR_NAME = "driver's name";
     public static final String COMPETITOR_NUMBER = "driver's start number";
-    public static final String DRIVER_CODE = "driver's short code";
+    //public static final String DRIVER_CODE = "driver's short code";
     public static final String NATIONALITY = "driver's nationality";
+
+    public static final String DRIVER_OBJECT = "driver_object";
 
     private String currentSeason;
 
@@ -141,14 +144,10 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
         startActivity(intent);
     }
 
-
     @Override
-    public void onItemClick(String competitorName, String startNumber, String code, String nationality, View v) {
+    public void onItemClick(Driver currentDriver) {
         Intent intent = new Intent(FieldActivity.this, CompetitorActivity.class);
-        intent.putExtra(COMPETITOR_NAME, competitorName);
-        intent.putExtra(COMPETITOR_NUMBER, startNumber);
-        intent.putExtra(DRIVER_CODE, code);
-        intent.putExtra(NATIONALITY, nationality);
+        intent.putExtra(DRIVER_OBJECT, (Parcelable) currentDriver);
         startActivity(intent);
     }
 

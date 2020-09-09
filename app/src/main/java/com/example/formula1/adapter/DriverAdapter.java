@@ -77,27 +77,28 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.DriverView
 
     @Override
     public void onBindViewHolder(@NonNull DriverViewHolder holder, final int position) {
-        final Driver currentItem = mDriverListFiltered.get(position);
-        final String fullName = currentItem.getSurname() + " " + currentItem.getName();
-        final String nationality = currentItem.getNationality();
-        holder.mName.setText(fullName);
-        holder.mNationality.setText(currentItem.getNationality());
-        holder.mBirthDate.setText(currentItem.getBirthDate());
+        final Driver currentDriver = mDriverListFiltered.get(position);
+        final String fullName = currentDriver.getSurname() + " " + currentDriver.getName();
+        final String nationality = currentDriver.getNationality();
 
-        final String competitorNumber = String.valueOf(currentItem.getCompetitorNumber());
+        holder.mName.setText(fullName);
+        holder.mNationality.setText(nationality);
+        holder.mBirthDate.setText(currentDriver.getBirthDate());
+
+        final String competitorNumber = String.valueOf(currentDriver.getStartNumber());
 
         if (competitorNumber.isEmpty() || Integer.parseInt(competitorNumber) == 0) {
             holder.mCompetitorNumber.setText("No start number available");
         } else {
-            holder.mCompetitorNumber.setText(String.valueOf(currentItem.getCompetitorNumber()));
+            holder.mCompetitorNumber.setText(String.valueOf(currentDriver.getStartNumber()));
         }
 
-        code = currentItem.getCode();
+        code = currentDriver.getCode();
 
         holder.mInfoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uri = Uri.parse(currentItem.getDriversWiki());
+                uri = Uri.parse(currentDriver.getDriversWiki());
                 listener.onDriverInfoButtonClick(uri, v);
             }
         });
@@ -106,7 +107,7 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.DriverView
             @Override
             public void onClick(View v) {
                 // void onItemClick(String competitorName, String startNumber, String code, String nationality, View view);
-                listener.onItemClick(fullName, competitorNumber, code, nationality, v);
+                listener.onItemClick(currentDriver);
             }
         });
     }
@@ -119,7 +120,8 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.DriverView
     public interface OnClick {
         void onDriverInfoButtonClick(Uri uri, View view);
 
-        void onItemClick(String competitorName, String startNumber, String code, String nationality, View view);
+        // added Driver as object
+        void onItemClick(Driver currentDriver);
     }
 
     public static class DriverViewHolder extends RecyclerView.ViewHolder {

@@ -38,14 +38,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CompetitorActivity extends AppCompatActivity {
 
-    private String currentCompetitor;
+    private Driver currentDriver;
+    private String driverId;
+    private String givenName;
+    private String familyName;
+    private String name;
     private String nationality;
-    private String alpha3;
     private String birthDate;
     private String startNumber;
     private String code;
+    // for wikipedia button
     private String url;
-    private String driverId;
+
+    private String currentCompetitor;
+
+    private String alpha3;
 
     private ActivityCompetitorBinding competitorBinding;
 
@@ -55,7 +62,7 @@ public class CompetitorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         competitorBinding = DataBindingUtil.setContentView(this, R.layout.activity_competitor);
 
-        getCompetitorFromIntent();
+        getDriverFromIntent();
         displayCompetitorData();
         competitorApiCall();
     }
@@ -71,7 +78,9 @@ public class CompetitorActivity extends AppCompatActivity {
                 .build();
 
         JsonCompetitorApi jsonCompetitorApi = retrofit.create(JsonCompetitorApi.class);
+
         Call<ApiResponse> call = jsonCompetitorApi.getCompetitorDetails(driverId);
+
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
@@ -86,6 +95,8 @@ public class CompetitorActivity extends AppCompatActivity {
 
                 List<Driver> driversList = driverTable.getDriverList();
                 // we have a list of arrays with a single object, therefor I use position = 0
+                Toast.makeText(CompetitorActivity.this, driversList.get(0).getCode(), Toast.LENGTH_LONG).show();
+
                 nationality = driversList.get(0).getNationality();
                 birthDate = driversList.get(0).getBirthDate();
                 url = driversList.get(0).getDriversWiki();
@@ -100,12 +111,19 @@ public class CompetitorActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    private void getCompetitorFromIntent() {
-        currentCompetitor = (String) Objects.requireNonNull(getIntent().getExtras()).get(FieldActivity.COMPETITOR_NAME);
-        Objects.requireNonNull(getSupportActionBar()).setTitle(currentCompetitor);
-        driverId = convertFullNameToDriverId(currentCompetitor);
-        startNumber = (String) getIntent().getExtras().get(FieldActivity.COMPETITOR_NUMBER);
-        nationality = (String) getIntent().getExtras().get(FieldActivity.NATIONALITY);
+    private void getDriverFromIntent() {
+        Driver currentDriver = Objects.requireNonNull(getIntent().getExtras()).getParcelable(FieldActivity.DRIVER_OBJECT);
+        if (currentDriver != null) {
+            // Display the name, nationality,
+            // date of birth, booked start number and abbreviation (code, eg RIC) of each competitor.
+            givenName = currentDriver.getName();
+            familyName = currentDriver.getSurname();
+            name = givenName + " " + familyName;
+            nationality = currentDriver.getNationality();
+            birthDate = currentDriver.getBirthDate();
+            startNumber = String.valueOf(currentDriver.getStartNumber());
+            code = currentDriver.getCode();
+        }
     }
 
     private String convertFullNameToDriverId(String fullName) {
@@ -114,12 +132,18 @@ public class CompetitorActivity extends AppCompatActivity {
     }
 
     public void displayCompetitorData() {
-        competitorBinding.competitorNameTextView.setText(currentCompetitor);
+        competitorBinding.competitorNameTextView.setText(name);
         competitorBinding.birthDateTextView.setText(birthDate);
         if (startNumber.equals("0") || startNumber.isEmpty()) {
             competitorBinding.startNumberTextView.setText("No start number available");
         } else {
             competitorBinding.startNumberTextView.setText(startNumber);
+        }
+
+        if (code.isEmpty()) {
+            competitorBinding.codeTextView.setVisibility(View.INVISIBLE);
+        } else {
+            competitorBinding.codeTextView.setText(code);
         }
 
         competitorBinding.competitorInfoButton.setOnClickListener(new View.OnClickListener() {
