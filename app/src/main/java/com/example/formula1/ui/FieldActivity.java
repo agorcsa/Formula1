@@ -147,7 +147,7 @@ public class FieldActivity extends AppCompatActivity implements DriverAdapter.On
     @Override
     public void onItemClick(Driver currentDriver) {
         Intent intent = new Intent(FieldActivity.this, CompetitorActivity.class);
-        intent.putExtra(DRIVER_OBJECT, (Parcelable) currentDriver);
+        intent.putExtra(DRIVER_OBJECT, currentDriver);
         startActivity(intent);
     }
 

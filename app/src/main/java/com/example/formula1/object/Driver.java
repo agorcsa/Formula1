@@ -1,9 +1,12 @@
 package com.example.formula1.object;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Driver {
+public class Driver implements Parcelable {
 
     @SerializedName("driverId")
     @Expose
@@ -76,4 +79,45 @@ public class Driver {
     public String getDriversWiki() {
         return driversWiki;
     }
+
+    protected Driver(Parcel in) {
+        driverId = in.readString();
+        surname = in.readString();
+        name = in.readString();
+        nationality = in.readString();
+        birthDate = in.readString();
+        code = in.readString();
+        startNumber = in.readInt();
+        driversWiki = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(driverId);
+        dest.writeString(surname);
+        dest.writeString(name);
+        dest.writeString(nationality);
+        dest.writeString(birthDate);
+        dest.writeString(code);
+        dest.writeInt(startNumber);
+        dest.writeString(driversWiki);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Driver> CREATOR = new Parcelable.Creator<Driver>() {
+        @Override
+        public Driver createFromParcel(Parcel in) {
+            return new Driver(in);
+        }
+
+        @Override
+        public Driver[] newArray(int size) {
+            return new Driver[size];
+        }
+    };
 }

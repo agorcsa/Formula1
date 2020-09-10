@@ -6,6 +6,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -18,8 +19,11 @@ import androidx.databinding.DataBindingUtil;
 import com.blongho.country_data.World;
 import com.example.formula1.R;
 import com.example.formula1.api.ApiResponse;
+import com.example.formula1.api.ImageApiResponse;
 import com.example.formula1.api.JsonCompetitorApi;
+import com.example.formula1.api.JsonImageApi;
 import com.example.formula1.databinding.ActivityCompetitorBinding;
+import com.example.formula1.imageobject.Item;
 import com.example.formula1.object.Driver;
 import com.example.formula1.object.DriverTable;
 import com.example.formula1.object.MRData;
@@ -37,6 +41,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class CompetitorActivity extends AppCompatActivity {
+
+    private static final String TAG = "CompetitorActivity";
 
     private Driver currentDriver;
     private String driverId;
@@ -65,7 +71,9 @@ public class CompetitorActivity extends AppCompatActivity {
         getDriverFromIntent();
         displayCompetitorData();
         competitorApiCall();
+        imageApiCall();
     }
+
 
     public void competitorApiCall() {
         Gson gson = new GsonBuilder()
@@ -105,10 +113,50 @@ public class CompetitorActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ApiResponse> call, Throwable t) {
                 t.printStackTrace();
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+    public void imageApiCall() {
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                // full URL is:
+                // https://www.googleapis.com/customsearch/v1?key=AIzaSyADx9HTfg1vEtKt2KllxBhwpjB5qUvO52k&cx=000213537299717655806:fsqehiydnxg&q=name 
+                .baseUrl("https://www.googleapis.com/customsearch/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        JsonImageApi jsonImageApi = retrofit.create(JsonImageApi.class);
+        Call<ImageApiResponse> call = jsonImageApi.getItems(name);
+
+        call.enqueue(new Callback<ImageApiResponse>() {
+            @Override
+            public void onResponse(Call<ImageApiResponse> call, Response<ImageApiResponse> response) {
+                if (!response.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "Code: " + response.code(), Toast.LENGTH_SHORT).show();
+                }
+
+                List<Item> items = response.body().getItemsList();
+
+                Item item = items.get(0);
+                String link = item.getLink();
+
+                Log.i(TAG,link);
+            }
+
+            @Override
+            public void onFailure(Call<ImageApiResponse> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void getDriverFromIntent() {
@@ -140,7 +188,7 @@ public class CompetitorActivity extends AppCompatActivity {
             competitorBinding.startNumberTextView.setText(startNumber);
         }
 
-        if (code.isEmpty()) {
+        if (code == null || code.isEmpty()) {
             competitorBinding.codeTextView.setVisibility(View.INVISIBLE);
         } else {
             competitorBinding.codeTextView.setText(code);
