@@ -11,12 +11,15 @@ public class Driver implements Parcelable {
     @SerializedName("driverId")
     @Expose
     private String driverId;
+
     @SerializedName("givenName")
     @Expose
     private String surname;
+
     @SerializedName("familyName")
     @Expose
-    private String name;
+    private String familyName;
+
     @SerializedName("nationality")
     @Expose
     private String nationality;
@@ -33,10 +36,10 @@ public class Driver implements Parcelable {
     @Expose
     private String driversWiki;
 
-    public Driver(String driverId, String surname, String name, String nationality, String birthDate, String code, int competitorNumber, String driversWiki) {
+    public Driver(String driverId, String surname, String familyName, String nationality, String birthDate, String code, int competitorNumber, String driversWiki) {
         this.driverId = driverId;
         this.surname = surname;
-        this.name = name;
+        this.familyName = familyName;
         this.nationality = nationality;
         this.birthDate = birthDate;
         this.code = code;
@@ -60,8 +63,8 @@ public class Driver implements Parcelable {
         return surname;
     }
 
-    public String getName() {
-        return name;
+    public String getFamilyName() {
+        return familyName;
     }
 
     public String getNationality() {
@@ -83,7 +86,7 @@ public class Driver implements Parcelable {
     protected Driver(Parcel in) {
         driverId = in.readString();
         surname = in.readString();
-        name = in.readString();
+        familyName = in.readString();
         nationality = in.readString();
         birthDate = in.readString();
         code = in.readString();
@@ -100,7 +103,7 @@ public class Driver implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(driverId);
         dest.writeString(surname);
-        dest.writeString(name);
+        dest.writeString(familyName);
         dest.writeString(nationality);
         dest.writeString(birthDate);
         dest.writeString(code);

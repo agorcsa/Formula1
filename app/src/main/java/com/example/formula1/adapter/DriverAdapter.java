@@ -78,7 +78,7 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.DriverView
     @Override
     public void onBindViewHolder(@NonNull DriverViewHolder holder, final int position) {
         final Driver currentDriver = mDriverListFiltered.get(position);
-        final String fullName = currentDriver.getSurname() + " " + currentDriver.getName();
+        final String fullName = currentDriver.getSurname() + " " + currentDriver.getFamilyName();
         final String nationality = currentDriver.getNationality();
 
         holder.mName.setText(fullName);
@@ -106,7 +106,6 @@ public class DriverAdapter extends RecyclerView.Adapter<DriverAdapter.DriverView
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // void onItemClick(String competitorName, String startNumber, String code, String nationality, View view);
                 listener.onItemClick(currentDriver);
             }
         });

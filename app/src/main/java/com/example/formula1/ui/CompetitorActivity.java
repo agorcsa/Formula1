@@ -27,9 +27,9 @@ import com.example.formula1.imageobject.Item;
 import com.example.formula1.object.Driver;
 import com.example.formula1.object.DriverTable;
 import com.example.formula1.object.MRData;
-import com.example.formula1.util.FlagImageRatio;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 import java.util.Objects;
@@ -43,6 +43,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CompetitorActivity extends AppCompatActivity {
 
     private static final String TAG = "CompetitorActivity";
+    private static final String API_KEY = "AIzaSyADx9HTfg1vEtKt2KllxBhwpjB5qUvO52k";
+    private static final String ENGINE_KEY = "000213537299717655806:fsqehiydnxg";
+    private static final String SEARCH_STRING = "driver's full name";
 
     private Driver currentDriver;
     private String driverId;
@@ -55,6 +58,8 @@ public class CompetitorActivity extends AppCompatActivity {
     private String code;
     // for wikipedia button
     private String url;
+    // for displaying driver's image
+    private String link;
 
     private String currentCompetitor;
 
@@ -72,6 +77,7 @@ public class CompetitorActivity extends AppCompatActivity {
         displayCompetitorData();
         competitorApiCall();
         imageApiCall();
+        loadDriversImage();
     }
 
 
@@ -132,7 +138,13 @@ public class CompetitorActivity extends AppCompatActivity {
                 .build();
 
         JsonImageApi jsonImageApi = retrofit.create(JsonImageApi.class);
-        Call<ImageApiResponse> call = jsonImageApi.getItems(name);
+
+        Driver currentDriver = Objects.requireNonNull(getIntent().getExtras()).getParcelable(FieldActivity.DRIVER_OBJECT);
+        givenName = currentDriver.getSurname();
+        familyName = currentDriver.getFamilyName();
+        name = givenName + " " + familyName;
+
+        Call<ImageApiResponse> call = jsonImageApi.getItems(API_KEY, ENGINE_KEY, name);
 
         call.enqueue(new Callback<ImageApiResponse>() {
             @Override
@@ -144,7 +156,7 @@ public class CompetitorActivity extends AppCompatActivity {
                 List<Item> items = response.body().getItemsList();
 
                 Item item = items.get(0);
-                String link = item.getLink();
+                url = item.getLink();
 
                 Log.i(TAG,link);
             }
@@ -162,9 +174,8 @@ public class CompetitorActivity extends AppCompatActivity {
     private void getDriverFromIntent() {
         Driver currentDriver = Objects.requireNonNull(getIntent().getExtras()).getParcelable(FieldActivity.DRIVER_OBJECT);
         if (currentDriver != null) {
-            // Display the name, nationality,
-            // date of birth, booked start number and abbreviation (code, eg RIC) of each competitor.
-            givenName = currentDriver.getName();
+
+            givenName = currentDriver.getFamilyName();
             familyName = currentDriver.getSurname();
             name = givenName + " " + familyName;
             nationality = currentDriver.getNationality();
@@ -236,5 +247,11 @@ public class CompetitorActivity extends AppCompatActivity {
     public String convertNationalityToAlpha3(String nationality) {
         alpha3 = nationality.substring(0, 2);
         return alpha3;
+    }
+
+    public void loadDriversImage() {
+        Picasso.get()
+                .load(link)
+                .into(competitorBinding.driverImageView);
     }
 }

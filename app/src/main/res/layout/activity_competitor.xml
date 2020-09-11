@@ -22,6 +22,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"/>
 
+        <ImageView
+            android:id="@+id/driver_image_view"
+            android:layout_width="200dp"
+            android:layout_height="200dp"/>
+
         <TextView
             android:id="@+id/start_number_textView"
             android:layout_width="wrap_content"
@@ -38,8 +43,8 @@
 
         <com.example.formula1.util.FlagImageRatio
             android:id="@+id/flag_imageView"
-            android:layout_width="100dp"
-            android:layout_height="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"  />
 
         <Button
